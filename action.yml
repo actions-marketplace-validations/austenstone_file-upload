@@ -1,7 +1,7 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'Image Upload'
+description: 'Upload images and get a URL using a branch'
 inputs:
-  image:
+  path:
     description: 'Image path Ex: images/image.png'
     required: true
   branch:
@@ -9,9 +9,9 @@ inputs:
     required: false
     default: 'images'
 outputs:
-  image-url:
+  url:
     description: "https://raw.githubusercontent.com/user/repo/refs/heads/branch/image.png"
-    value: ${{ steps.image-upload.outputs.image-url }}
+    value: ${{ steps.image-upload.outputs.url }}
 runs:
   using: "composite"
   steps:
@@ -26,10 +26,9 @@ runs:
 
     - name: Image Upload
       id: image-upload
-      run: echo "image-url=https://raw.githubusercontent.com/$OWNER/$REPO/refs/heads/$INPUT_BRANCH/$INPUT_IMAGE" >> $GITHUB_OUTPUT
+      run: echo "url=https://raw.githubusercontent.com/$REPO/refs/heads/$INPUT_BRANCH/$INPUT_IMAGE" >> $GITHUB_OUTPUT
       shell: bash
       env:
-        OWNER: ${{ github.repository_owner }}
         REPO: ${{ github.repository }}
         INPUT_IMAGE: ${{ inputs.image }}
         INPUT_BRANCH: ${{ inputs.branch }}
