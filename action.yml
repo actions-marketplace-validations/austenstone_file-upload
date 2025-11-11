@@ -33,5 +33,5 @@ runs:
       shell: bash
       env:
         REPO: ${{ github.repository }}
-        INPUT_IMAGE: ${{ inputs.image }}
+        INPUT_IMAGE: ${{ inputs.path }}
         INPUT_BRANCH: ${{ inputs.branch }}
