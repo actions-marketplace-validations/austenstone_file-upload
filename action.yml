@@ -1,20 +1,20 @@
-name: 'Image Upload'
-description: 'Upload images and get a URL using a branch'
+name: 'Raw Upload'
+description: 'Upload raw images and files and get a URL.'
 branding:
   icon: 'image'
   color: 'green'
 inputs:
   path:
-    description: 'Image path Ex: images/image.png'
+    description: 'File path Ex: images/image.png'
     required: true
   branch:
-    description: 'Image branch name'
+    description: 'Branch name'
     required: false
     default: 'images'
 outputs:
   url:
     description: "https://raw.githubusercontent.com/user/repo/refs/heads/branch/image.png"
-    value: ${{ steps.image-upload.outputs.url }}
+    value: ${{ steps.raw.outputs.url }}
 runs:
   using: "composite"
   steps:
@@ -27,11 +27,11 @@ runs:
         commit_options: '--no-verify'
         push_options: '--force'
 
-    - name: Image Upload
-      id: image-upload
-      run: echo "url=https://raw.githubusercontent.com/$REPO/refs/heads/$INPUT_BRANCH/$INPUT_IMAGE" >> $GITHUB_OUTPUT
+    - name: Get Raw URL
+      id: raw
+      run: echo "url=https://raw.githubusercontent.com/$REPO/refs/heads/$INPUT_BRANCH/$INPUT_PATH" >> $GITHUB_OUTPUT
       shell: bash
       env:
         REPO: ${{ github.repository }}
-        INPUT_IMAGE: ${{ inputs.path }}
+        INPUT_PATH: ${{ inputs.path }}
         INPUT_BRANCH: ${{ inputs.branch }}
