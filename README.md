@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5 # You must check out the repository
       - id: upload
-        uses: austenstone/image-upload@v1
+        uses: austenstone/file-upload@v1
         with:
           path: 'images/screenshot.png'
       
