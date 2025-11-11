@@ -11,7 +11,10 @@ permissions:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
+      - uses: actions/checkout@v5 # You must check out the repository
+        with:
+          fetch-depth: 0
       - id: upload
         uses: austenstone/image-upload@v1
         with:
