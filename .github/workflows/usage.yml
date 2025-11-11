@@ -8,6 +8,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - run: pip install matplotlib numpy
       - run: |
           import matplotlib.pyplot as plt
