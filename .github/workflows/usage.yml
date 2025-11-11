@@ -1,0 +1,38 @@
+on:
+  push:
+
+jobs:
+  upload-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - run: pip install matplotlib numpy
+      - run: |
+          import matplotlib.pyplot as plt
+          import numpy as np
+
+          # Create a simple image
+          data = np.random.rand(10,10)
+          plt.imshow(data, cmap='viridis')
+          plt.colorbar()
+          plt.title('Random Data Visualization')
+          plt.savefig('output.png', dpi=150, bbox_inches='tight')
+          print("✅ Image created successfully!")
+        shell: python
+
+      - id: upload-image
+        uses: austenstone/file-upload@main
+        with:
+          path: output.png
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-visualization
+          path: output.png
+
+      - name: Add image to job summary
+        run: |
+          echo "![Generated Image]($IMAGE_URL)" >> $GITHUB_STEP_SUMMARY
+        env:
+          IMAGE_URL: ${{ steps.upload-image.outputs.url }}
