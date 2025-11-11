@@ -1,0 +1,32 @@
+name: 'Hello World'
+description: 'Greet someone'
+inputs:
+  image:
+    description: 'Image path Ex: images/image.png'
+    required: true
+  branch:
+    description: 'Image branch name'
+    required: false
+    default: 'images'
+outputs:
+  image-url:
+    description: "https://raw.githubusercontent.com/user/repo/refs/heads/branch/image.png"
+    value: ${{ steps.image-upload.outputs.image-url }}
+runs:
+  using: "composite"
+  steps:
+    - uses: stefanzweifel/git-auto-commit-action@v7
+      with:
+        branch: ${{ inputs.branch }}
+        # create_branch: true
+        push_options: '--force'
+
+    - name: Image Upload
+      id: image-upload
+      run: echo "image-url=https://raw.githubusercontent.com/$OWNER/$REPO/refs/heads/$INPUT_BRANCH/$INPUT_IMAGE" >> $GITHUB_OUTPUT
+      shell: bash
+      env:
+        OWNER: ${{ github.repository_owner }}
+        REPO: ${{ github.repository }}
+        INPUT_IMAGE: ${{ inputs.image }}
+        INPUT_BRANCH: ${{ inputs.branch }}
